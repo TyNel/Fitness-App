@@ -1,33 +1,25 @@
-import React from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
-
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-}));
 
 const rows = [];
 class Exercises extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Title>Recent Orders</Title>
+        <Title>Test</Title>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Ship To</TableCell>
-              <TableCell>Payment Method</TableCell>
-              <TableCell align="right">Sale Amount</TableCell>
+              <TableCell>Test</TableCell>
+              <TableCell>Test</TableCell>
+              <TableCell>Test</TableCell>
+              <TableCell>Test</TableCell>
+              <TableCell align="right">Test</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -42,7 +34,6 @@ class Exercises extends React.Component {
             ))}
           </TableBody>
         </Table>
-        <div className={useStyles.seeMore}></div>
       </React.Fragment>
     );
   }
