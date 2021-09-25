@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import onLogin from "../Services/UserServices";
+import { onLogin } from "../Services/UserServices";
 
 const theme = createTheme();
 
@@ -48,7 +48,13 @@ class Login extends React.Component {
 
   onLoginSuccess = (response) => {
     console.log("Login Successful", response.data);
-    this.props.history.push("/Dashboard");
+    let loggedInUser = { user: response.data.LoginUser };
+    this.props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`, {
+      type: "USER_DATA",
+      payload: loggedInUser,
+    });
+
+    localStorage.setItem("token", response.data.token);
   };
 
   onLoginError = (response) => {

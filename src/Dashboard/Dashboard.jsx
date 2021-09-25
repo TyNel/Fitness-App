@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React, useState, useEffect } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -9,20 +9,18 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./ListItems";
+import { mainListItems } from "./ListItems";
 import Calendar from "./Calendar";
-import Filler from "./filler";
+// import Filler from "./filler";
 import Exercises from "./Exercises";
+import { getExerciseData } from "../Services/UserServices";
 
 const drawerWidth = 240;
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -40,7 +38,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -66,13 +63,30 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
-
 const mdTheme = createTheme();
 
-function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+function Dashboard(props) {
+  const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const [exerciseArray, setExercise] = useState([]);
+
+  useEffect(() => {
+    if (exerciseArray.length === 0)
+      getExerciseData(props.location.state.payload.user.UserId)
+        .then(onGetExerciseSuccess)
+        .catch(onGetExerciseError);
+  }, [exerciseArray, props.location.state.payload.user.UserId]);
+
+  const onGetExerciseSuccess = (response) => {
+    console.log("User Exercises:", response);
+    setExercise(response);
+  };
+
+  const onGetExerciseError = (response) => {
+    console.log(response.error);
   };
 
   return (
@@ -103,14 +117,7 @@ function DashboardContent() {
               color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            >{`Hello ${props.location.state.payload.user.FirstName}`}</Typography>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -128,8 +135,6 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List>{mainListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
         </Drawer>
         <Box
           component="main"
@@ -149,7 +154,7 @@ function DashboardContent() {
               <Grid item xs={12} md={8} lg={9}>
                 <Calendar />
               </Grid>
-              {/* Recent Deposits */}
+
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -160,7 +165,7 @@ function DashboardContent() {
                   }}
                 ></Paper>
               </Grid>
-              {/* Recent Orders */}
+
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Exercises />
@@ -174,6 +179,4 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+export default Dashboard;
