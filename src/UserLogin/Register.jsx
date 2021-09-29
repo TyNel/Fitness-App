@@ -40,6 +40,7 @@ class Register extends React.Component {
   };
 
   onSubmit = (e) => {
+    e.preventDefault();
     onRegister(this.state.registerData)
       .then(this.onRegisterSuccess)
       .catch(this.onRegisterError);
@@ -127,6 +128,7 @@ class Register extends React.Component {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={this.onSubmit}
               >
                 Sign Up
               </Button>

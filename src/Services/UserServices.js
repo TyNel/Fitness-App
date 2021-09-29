@@ -41,4 +41,19 @@ const getExerciseData = (id) => {
   return axios(config);
 };
 
-export { onLogin, getExerciseData, onRegister };
+const getExercisesByDate = (id, date) => {
+  const config = {
+    method: "GET",
+    url: `https://localhost:5001/api/fitness/${id}/${date}`,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
+export { onLogin, getExerciseData, onRegister, getExercisesByDate };

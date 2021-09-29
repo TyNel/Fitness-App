@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,50 +8,51 @@ import Title from "./Title";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import { Context } from "../Store";
 
-const rows = [];
-class Exercises extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Title>Exercises</Title>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Type</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Weight</TableCell>
-              <TableCell>Reps</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Notes</TableCell>
+function Exercises() {
+  const [state] = useContext(Context);
+  console.log(state);
+  return (
+    <React.Fragment>
+      <Title>Exercises</Title>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Type</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Weight</TableCell>
+            <TableCell>Reps</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Notes</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {state.exercises.map((exercise) => (
+            <TableRow key={exercise.Id}>
+              <TableCell>{exercise.Type}</TableCell>
+              <TableCell>{exercise.Exercise_Name}</TableCell>
+              <TableCell>{exercise.Weight}</TableCell>
+              <TableCell>{exercise.Reps}</TableCell>
+              <TableCell>{exercise.Status_Name}</TableCell>
+              <TableCell>{exercise.UserNotes}</TableCell>
+              <TableCell align="right">
+                <IconButton color="inherit">
+                  <EditIcon />
+                </IconButton>
+              </TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell>
+                <IconButton color="inherit">
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.shipTo}</TableCell>
-                <TableCell>{row.paymentMethod}</TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell>
-                  <IconButton color="inherit">
-                    <EditIcon />
-                  </IconButton>
-                </TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell>
-                  <IconButton color="inherit">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </React.Fragment>
-    );
-  }
+          ))}
+        </TableBody>
+      </Table>
+    </React.Fragment>
+  );
 }
 
 export default Exercises;

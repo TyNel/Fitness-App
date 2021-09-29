@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -16,9 +16,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./ListItems";
 import Calendar from "./Calendar";
-// import Filler from "./filler";
+// import { Timer } from "./filler";
 import Exercises from "./Exercises";
-import { getExerciseData } from "../Services/UserServices";
+import AddExercise from "./AddExerciseModal";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -71,24 +71,6 @@ function Dashboard(props) {
     setOpen(!open);
   };
 
-  const [exerciseArray, setExercise] = useState([]);
-
-  useEffect(() => {
-    if (exerciseArray.length === 0)
-      getExerciseData(props.location.state.payload.user.UserId)
-        .then(onGetExerciseSuccess)
-        .catch(onGetExerciseError);
-  }, [exerciseArray, props.location.state.payload.user.UserId]);
-
-  const onGetExerciseSuccess = (response) => {
-    console.log("User Exercises:", response);
-    setExercise(response);
-  };
-
-  const onGetExerciseError = (response) => {
-    console.log(response.error);
-  };
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -118,6 +100,7 @@ function Dashboard(props) {
               noWrap
               sx={{ flexGrow: 1 }}
             >{`Hello ${props.location.state.payload.user.FirstName}`}</Typography>
+            <AddExercise />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -152,7 +135,7 @@ function Dashboard(props) {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={9}>
-                <Calendar />
+                <Calendar userId={props.location.state.payload.user.UserId} />
               </Grid>
 
               <Grid item xs={12} md={4} lg={3}>
@@ -163,7 +146,9 @@ function Dashboard(props) {
                     flexDirection: "column",
                     height: 265,
                   }}
-                ></Paper>
+                >
+                  {" "}
+                </Paper>
               </Grid>
 
               <Grid item xs={12}>
