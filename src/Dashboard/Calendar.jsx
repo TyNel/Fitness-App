@@ -3,11 +3,12 @@ import RCalendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Context } from "../Store";
 import { getExercisesByDate } from "../Services/UserServices";
+import { useParams } from "react-router-dom";
 
 function Calendar(props) {
   const [state, dispatch] = useContext(Context);
   const [date, setDate] = useState(new Date());
-  const userId = props.userId;
+  const { id } = useParams();
 
   const onGetExerciseSuccess = useCallback(
     (response) => {
@@ -17,18 +18,22 @@ function Calendar(props) {
     [dispatch]
   );
 
-  const onGetExerciseError = (response) => {
-    console.log(response.error);
-  };
-
   useEffect(() => {
-    getExercisesByDate(userId, date.toISOString().substring(0, 10))
+    getExercisesByDate(id, date.toISOString().substring(0, 10))
       .then(onGetExerciseSuccess)
       .catch(onGetExerciseError);
-  }, [date, userId, onGetExerciseSuccess]);
+  }, [date, id, onGetExerciseSuccess]);
 
   const onDateChange = (newDate) => {
     setDate(newDate);
+    dispatch({
+      type: "SET_DATE",
+      payload: date.toISOString().substring(0, 10),
+    });
+  };
+
+  const onGetExerciseError = (response) => {
+    console.log(response.error);
   };
 
   return (

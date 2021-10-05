@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useContext, useCallback, useEffect } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,7 +18,10 @@ import { mainListItems } from "./ListItems";
 import Calendar from "./Calendar";
 // import { Timer } from "./filler";
 import Exercises from "./Exercises";
-import AddExercise from "./AddExerciseModal";
+import AddExerciseModal from "./AddExerciseModal";
+import { Context } from "../Store";
+import { GetExerciseType, GetUser } from "../Services/UserServices";
+import { useParams } from "react-router-dom";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -70,6 +73,51 @@ function Dashboard(props) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const { id } = useParams();
+
+  const [state, dispatch] = useContext(Context);
+
+  const onGetTypeSuccess = useCallback(
+    (response) => {
+      let data = response.data;
+      dispatch({ type: "SET_TYPE", payload: data });
+    },
+    [dispatch]
+  );
+
+  const onGetTypeError = (response) => {
+    console.log("Error Getting Exercises", response.error);
+  };
+
+  const OnUserSuccess = useCallback(
+    (response) => {
+      dispatch({
+        type: "SET_USER",
+        payload: response.data,
+      });
+    },
+    [dispatch]
+  );
+
+  const OnUserError = (response) => {
+    console.log(response.error);
+  };
+
+  console.log(state);
+
+  useEffect(() => {
+    if (state.type.length === 0)
+      GetExerciseType().then(onGetTypeSuccess).catch(onGetTypeError);
+    if (state.currentUser === "") {
+      GetUser(id).then(OnUserSuccess).catch(OnUserError);
+    }
+  }, [
+    onGetTypeSuccess,
+    state.currentUser,
+    id,
+    OnUserSuccess,
+    state.type.length,
+  ]);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -99,8 +147,8 @@ function Dashboard(props) {
               color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
-            >{`Hello ${props.location.state.payload.user.FirstName}`}</Typography>
-            <AddExercise />
+            >{`Hello ${state.currentUser.FirstName}`}</Typography>
+            <AddExerciseModal />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -135,7 +183,7 @@ function Dashboard(props) {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={9}>
-                <Calendar userId={props.location.state.payload.user.UserId} />
+                <Calendar />
               </Grid>
 
               <Grid item xs={12} md={4} lg={3}>

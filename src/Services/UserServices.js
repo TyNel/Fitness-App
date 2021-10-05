@@ -56,4 +56,74 @@ const getExercisesByDate = (id, date) => {
   return axios(config);
 };
 
-export { onLogin, getExerciseData, onRegister, getExercisesByDate };
+const GetExerciseType = () => {
+  const config = {
+    method: "GET",
+    url: `https://localhost:5001/api/fitness/ExerciseType`,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
+const AddExercise = (payload) => {
+  const config = {
+    method: "POST",
+    url: "https://localhost:5001/api/fitness/addExercise",
+    data: payload,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
+const GetUser = (id) => {
+  const config = {
+    method: "GET",
+    url: `https://localhost:5001/api/fitness/user/${id}`,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
+const DeleteExercise = (id) => {
+  const config = {
+    method: "DELETE",
+    url: `https://localhost:5001/api/fitness/${id}`,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
+export {
+  onLogin,
+  getExerciseData,
+  onRegister,
+  getExercisesByDate,
+  GetExerciseType,
+  AddExercise,
+  GetUser,
+  DeleteExercise,
+};

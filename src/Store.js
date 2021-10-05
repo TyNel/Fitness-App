@@ -3,6 +3,9 @@ import Reducer from "./Reducer";
 
 const INITIAL_STATE = {
   exercises: [],
+  type: [],
+  dateClicked: "",
+  currentUser: "",
 };
 
 const Store = ({ children }) => {

@@ -9,10 +9,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import { Context } from "../Store";
+import axios from "axios";
 
 function Exercises() {
   const [state] = useContext(Context);
-  console.log(state);
+
+  async function onDelete(id) {
+    axios
+      .delete(`https://localhost:5001/api/fitness/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <React.Fragment>
       <Title>Exercises</Title>
@@ -25,6 +42,9 @@ function Exercises() {
             <TableCell>Reps</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Notes</TableCell>
+            <TableCell />
+            <TableCell />
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -43,7 +63,10 @@ function Exercises() {
               </TableCell>
               <TableCell align="right"></TableCell>
               <TableCell>
-                <IconButton color="inherit">
+                <IconButton
+                  color="inherit"
+                  onClick={(e) => onDelete(exercise.Id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
