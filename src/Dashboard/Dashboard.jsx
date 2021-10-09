@@ -16,7 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./ListItems";
 import Calendar from "./Calendar";
-// import { Timer } from "./filler";
+import Timer from "./Timer";
 import Exercises from "./Exercises";
 import AddExerciseModal from "./AddExerciseModal";
 import { Context } from "../Store";
@@ -196,9 +196,9 @@ function Dashboard(props) {
                   }}
                 >
                   {" "}
+                  <Timer />
                 </Paper>
               </Grid>
-
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Exercises />

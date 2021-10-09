@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,9 +10,17 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import { Context } from "../Store";
 import axios from "axios";
+import EditExercise from "./EditExercise";
 
-function Exercises() {
-  const [state] = useContext(Context);
+function Exercises(props) {
+  const [state, dispatch] = useContext(Context);
+  const [isEditing, setEditing] = useState(false);
+  const [exerciseId, setId] = useState("");
+
+  const handleEdit = (id) => {
+    setId({ id });
+    setEditing(!isEditing);
+  };
 
   async function onDelete(id) {
     axios
@@ -22,15 +30,20 @@ function Exercises() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        let data = state.exercises.filter((e) => {
+          return e.Id !== id;
+        });
+        dispatch({ type: "SET_EXERCISES", payload: data });
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  return (
+  return isEditing ? (
+    <EditExercise handleEdit={handleEdit} id={exerciseId} />
+  ) : (
     <React.Fragment>
       <Title>Exercises</Title>
       <Table size="small">
@@ -57,7 +70,10 @@ function Exercises() {
               <TableCell>{exercise.Status_Name}</TableCell>
               <TableCell>{exercise.UserNotes}</TableCell>
               <TableCell align="right">
-                <IconButton color="inherit">
+                <IconButton
+                  color="inherit"
+                  onClick={() => handleEdit(exercise.Id)}
+                >
                   <EditIcon />
                 </IconButton>
               </TableCell>

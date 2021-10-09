@@ -117,6 +117,22 @@ const DeleteExercise = (id) => {
   return axios(config);
 };
 
+const UpdateExercise = (payload) => {
+  const config = {
+    method: "PUT",
+    url: "https://localhost:5001/api/fitness/UpdateExercise",
+    data: payload,
+    withCredentials: true,
+    crossdomain: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  return axios(config);
+};
+
 export {
   onLogin,
   getExerciseData,
@@ -126,4 +142,5 @@ export {
   AddExercise,
   GetUser,
   DeleteExercise,
+  UpdateExercise,
 };
