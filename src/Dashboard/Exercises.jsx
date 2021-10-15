@@ -12,13 +12,13 @@ import { Context } from "../Store";
 import axios from "axios";
 import EditExercise from "./EditExercise";
 
-function Exercises(props) {
+function Exercises() {
   const [state, dispatch] = useContext(Context);
   const [isEditing, setEditing] = useState(false);
   const [exerciseId, setId] = useState("");
 
   const handleEdit = (id) => {
-    setId({ id });
+    setId(id);
     setEditing(!isEditing);
   };
 
@@ -27,7 +27,7 @@ function Exercises(props) {
       .delete(`https://localhost:5001/api/fitness/${id}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
       .then(() => {

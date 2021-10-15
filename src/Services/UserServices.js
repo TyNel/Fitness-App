@@ -34,7 +34,7 @@ const getExerciseData = (id) => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -49,7 +49,7 @@ const getExercisesByDate = (id, date) => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -64,7 +64,7 @@ const GetExerciseType = () => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -79,8 +79,7 @@ const AddExercise = (payload) => {
     withCredentials: true,
     crossdomain: true,
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -95,7 +94,7 @@ const GetUser = (id) => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -110,7 +109,7 @@ const DeleteExercise = (id) => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 
@@ -126,7 +125,7 @@ const UpdateExercise = (payload) => {
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
   };
 

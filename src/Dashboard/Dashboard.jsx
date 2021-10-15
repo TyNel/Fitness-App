@@ -5,7 +5,6 @@ import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { mainListItems } from "./ListItems";
+import { MainListItems } from "./ListItems";
 import Calendar from "./Calendar";
 import Timer from "./Timer";
 import Exercises from "./Exercises";
@@ -99,8 +98,8 @@ function Dashboard(props) {
     [dispatch]
   );
 
-  const OnUserError = (response) => {
-    console.log(response.error);
+  const OnUserError = (error) => {
+    console.log(error);
   };
 
   console.log(state);
@@ -165,7 +164,7 @@ function Dashboard(props) {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{mainListItems}</List>
+          <MainListItems />
         </Drawer>
         <Box
           component="main"
@@ -193,6 +192,7 @@ function Dashboard(props) {
                     display: "flex",
                     flexDirection: "column",
                     height: 265,
+                    alignItems: "center",
                   }}
                 >
                   {" "}

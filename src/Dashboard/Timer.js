@@ -1,70 +1,75 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
+import AddIcon from "@mui/icons-material/Add";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function Timer() {
   const [time, setTime] = useState(0);
-  const [isActive, setActive] = useState(false);
-  const [isPaused, setPaused] = useState(false);
-  const countRef = useRef(null);
+  const [key, setKey] = useState(0);
 
-  const formatTime = () => {
-    const getSeconds = `0${time % 60}`.slice(-2);
-    const minutes = `${Math.floor(time / 60)}`;
-    const getMinutes = `0${minutes % 60}`.slice(-2);
-    const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
-
-    return `${getHours} : ${getMinutes} : ${getSeconds}`;
-  };
-
-  const handleStart = () => {
-    setActive(true);
-    setPaused(true);
-    if (time > 0) {
-      countRef.current = setInterval(() => {
-        setTime((timer) => timer - 1);
-      }, 1000);
-    } else {
-      countRef.current = setInterval(() => {
-        setTime((timer) => timer + 1);
-      }, 1000);
-    }
-  };
-
-  const handlePause = () => {
-    clearInterval(countRef.current);
-    setPaused(false);
-  };
-
-  const handleResume = () => {
-    setPaused(true);
-    countRef.current = setInterval(() => {
-      setTime((timer) => timer + 1);
-    }, 1000);
-  };
-
-  const handleReset = () => {
-    clearInterval(countRef.current);
-    setActive(false);
-    setPaused(false);
-    setTime(0);
+  const handleTimeChange = (e) => {
+    const time = e.target.value;
+    setTime({
+      time,
+    });
   };
 
   return (
-    <div className="app">
-      <div className="stopwatch-card">
-        <p>{formatTime(time)}</p>
-        <div className="buttons">
-          {!isActive && !isPaused ? (
-            <button onClick={handleStart}>Start</button>
-          ) : isPaused ? (
-            <button onClick={handlePause}>Pause</button>
-          ) : (
-            <button onClick={handleResume}>Resume</button>
-          )}
-          <button onClick={handleReset} disabled={!isActive}>
-            Reset
-          </button>
-        </div>
-      </div>
+    <div>
+      <Box ml={5}>
+        <CountdownCircleTimer
+          key={key}
+          size={120}
+          isPlaying
+          duration={time.time ? time.time : 0}
+          colors={[
+            ["#004777", 0.33],
+            ["#F7B801", 0.33],
+            ["#A30000", 0.33],
+          ]}
+        >
+          {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
+      </Box>
+      <Box sx={{ mt: 3.5 }}>
+        <Slider
+          key={key}
+          aria-label="Seconds"
+          defaultValue={0}
+          valueLabelDisplay="auto"
+          step={10}
+          marks
+          max={120}
+          onChange={handleTimeChange}
+        />
+        <Box sx={{ display: "flex" }}>
+          <Box>
+            <Button
+              onClick={() => setKey((prevKey) => prevKey + 1)}
+              variant="contained"
+              startIcon={<AddIcon />}
+            >
+              Time
+            </Button>
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <Button
+              style={{ backgroundColor: "#9E9E9E" }}
+              onClick={() => {
+                setKey((prevKey) => prevKey + 1);
+                setTime(0);
+              }}
+              variant="contained"
+              startIcon={<RefreshIcon />}
+            >
+              Reset
+            </Button>
+          </Box>
+        </Box>
+      </Box>
     </div>
   );
 }

@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
@@ -12,45 +13,59 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { onLogin } from "../Services/UserServices";
 import { Context } from "../Store";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import axios from "axios";
 
 const theme = createTheme();
 
 function Login(props) {
-  const INITIAL_STATE = {
-    email: "",
-    password: "",
-  };
-
   const [state, dispatch] = useContext(Context);
-  const [login, setLogin] = useState(INITIAL_STATE);
 
-  const onLoginDataChange = (e) => {
-    setLogin({
-      ...login,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const validationSchema = yup.object({
+    email: yup
+      .string("Please enter your email")
+      .email("Enter a valid email")
+      .required("Email is required"),
+    password: yup
+      .string("Enter your password")
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    onLogin(login).then(onLoginSuccess).catch(onLoginError);
-  };
+  const onSubmit = async (values) => {
+    let response = await axios.post(
+      "https://localhost:5001/api/fitness/login",
+      values
+    );
 
-  const onLoginSuccess = (response) => {
-    console.log("Login Successful", response.data);
+    if (response.error) {
+      console.log(response.error);
+    }
+
     dispatch({
       type: "SET_USER",
       payload: response.data.LoginUser,
     });
-    localStorage.setItem("token", response.data.token);
+
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
     props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`);
+
+    console.log(response);
   };
 
-  const onLoginError = (response) => {
-    console.log("Login Failed", response.error);
+  const initialValues = {
+    email: "",
+    password: "",
   };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -89,55 +104,61 @@ function Login(props) {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                label="Email Address"
-                name="email"
-                value={login.email}
-                onChange={onLoginDataChange}
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                value={login.password}
-                onChange={onLoginDataChange}
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                onClick={onSubmit}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link to="#" variant="body2">
-                    Forgot password?
-                  </Link>
+
+            <FormControl onSubmit={formik.handleSubmit}>
+              <Box component="form" sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Email Address"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+                <Grid container>
+                  <Grid item xs>
+                    <Link to="#" variant="body2">
+                      Forgot password?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href="/Register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Link href="/Register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            </FormControl>
           </Box>
         </Grid>
       </Grid>

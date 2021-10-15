@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,75 +11,81 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { UpdateExercise } from "../Services/UserServices";
+import { useFormik } from "formik";
+import axios from "axios";
+import * as yup from "yup";
 
 function Edit_Exercises(props) {
-  const EDIT_STATE = {
-    Id: "",
-    UserId: "",
-    Exercise_Name: "",
-    Weight: 0,
-    Reps: 0,
-    Exercise_Type: "",
-    Status_Id: "",
-    UserNotes: "",
-  };
-
   const statusValue = [
     { value: 1, label: "Completed" },
     { value: 2, label: "Not Completed" },
   ];
 
+  const date = new Date()
+    .toLocaleString("en-us", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2");
+
   const [state, dispatch] = useContext(Context);
-  const [edit, setEdit] = useState(EDIT_STATE);
-  const [editedState, setData] = useState(state.exercises);
   const handleEdit = props.handleEdit;
   const id = props.id;
+  const index = state.exercises.findIndex((exercise) => exercise.Id === id);
+  const currentExercise = { ...state.exercises[index] };
+  console.log(currentExercise);
 
-  const handleInput = (e) => {
-    if (e.target.name === "Weight" || e.target.name === "Reps") {
-      setEdit({
-        ...edit,
-        [e.target.name]: parseInt(e.target.value),
-      });
-    }
-
-    setEdit({
-      ...edit,
-      [e.target.name]: e.target.value,
-    });
+  const initialValues = {
+    id: id,
+    userId: currentExercise.UserId ? currentExercise.UserId : "",
+    exercise_name: currentExercise.Exercise_Name
+      ? currentExercise.Exercise_Name
+      : "",
+    weight: currentExercise.Weight ? currentExercise.Weight : "",
+    reps: currentExercise.Reps ? currentExercise.Reps : "",
+    exercise_type: currentExercise.Exercise_Type
+      ? currentExercise.Exercise_Type
+      : "",
+    status_id: currentExercise.Status_Id ? currentExercise.Status_Id : "",
+    userNotes: currentExercise.UserNotes ? currentExercise.UserNotes : "",
+    dateAdded: currentExercise.DateAdded ? currentExercise.DateAdded : "",
+    dateModified: date,
   };
-  console.log(state.exercises);
 
-  const handleSubmit = () => {
-    UpdateExercise(edit)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-  };
-
-  const onSubmitSuccess = (response) => {
-    dispatch({ type: "SET_EXERCISES", payload: editedState });
+  const onSubmit = async (values) => {
+    let response = await axios.put(
+      "https://localhost:5001/api/fitness/UpdateExercise",
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    let data = [...state.exercises];
+    data[index] = response.data;
+    dispatch({ type: "SET_EXERCISES", payload: data });
     handleEdit();
   };
 
-  useEffect(() => {
-    let currentExercise = state.exercises.filter((e) => {
-      return e.Id === id.id;
-    });
-    setEdit({
-      ...edit,
-      Id: currentExercise[0].Id,
-      UserId: currentExercise[0].UserId,
-      Exercise_Name: currentExercise[0].Exercise_Name,
-      Weight: currentExercise[0].Weight,
-      Reps: currentExercise[0].Reps,
-      UserNotes: currentExercise[0].UserNotes,
-      Status_Id: currentExercise[0].Status_Id,
-      Exercise_Type: currentExercise[0].Exercise_Type,
-    });
-  }, []);
+  const validationSchema = yup.object({
+    exercise_name: yup
+      .string("Please enter a name")
+      .min(2, "Name must be at least 2 characters")
+      .required("Name is required"),
+    weight: yup.number("Please enter a weight").required("Weight is required"),
+    reps: yup
+      .number("Please enter number of reps")
+      .required("Rep count is required"),
+    userNotes: yup.string("Please enter notes"),
+  });
 
-  console.log(edit);
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
 
   return (
     <React.Fragment>
@@ -104,14 +110,14 @@ function Edit_Exercises(props) {
               <TextField
                 select
                 size="small"
-                name="Exercise_Type"
+                name="exercise_type"
                 fullWidth
-                value={edit.Exercise_Type}
-                onChange={handleInput}
+                value={formik.values.exercise_type}
+                onChange={formik.handleChange}
               >
                 {state.type.map((type) => {
                   return (
-                    <MenuItem key={type.Id} value={type.Id}>
+                    <MenuItem key={type.Type_Id} value={type.Type_Id}>
                       {type.Type}
                     </MenuItem>
                   );
@@ -120,29 +126,40 @@ function Edit_Exercises(props) {
             </TableCell>
             <TableCell>
               <TextField
-                value={edit.Exercise_Name}
-                name="Exercise_Name"
-                onChange={handleInput}
+                value={formik.values.exercise_name}
+                name="exercise_mame"
+                onChange={formik.handleChange}
                 size="small"
                 fullWidth
+                error={
+                  formik.errors.exercise_name &&
+                  Boolean(formik.errors.exercise_name)
+                }
+                helperText={
+                  formik.touched.exercise_name && formik.errors.exercise_name
+                }
               />
             </TableCell>
             <TableCell>
               {" "}
               <TextField
-                value={edit.Weight}
+                value={formik.values.weight}
                 type="number"
-                name="Weight"
-                onChange={handleInput}
+                name="weight"
+                onChange={formik.handleChange}
+                error={formik.errors.weight && Boolean(formik.errors.weight)}
+                helperText={formik.touched.weight && formik.errors.weight}
                 size="small"
               />
             </TableCell>
             <TableCell>
               <TextField
-                value={edit.Reps}
+                value={formik.values.reps}
                 type="number"
-                name="Reps"
-                onChange={handleInput}
+                name="reps"
+                onChange={formik.handleChange}
+                error={formik.errors.reps && Boolean(formik.errors.reps)}
+                helperText={formik.touched.reps && formik.errors.reps}
                 size="small"
               />
             </TableCell>
@@ -150,10 +167,10 @@ function Edit_Exercises(props) {
               <TextField
                 size="small"
                 select
-                name="Status_Id"
-                value={edit.Status_Id}
+                name="status_id"
+                value={formik.values.status_id}
                 fullWidth
-                onChange={handleInput}
+                onChange={formik.handleChange}
               >
                 {statusValue.map((status) => {
                   return (
@@ -167,14 +184,18 @@ function Edit_Exercises(props) {
             </TableCell>
             <TableCell>
               <TextField
-                value={edit.UserNotes}
-                name="UserNotes"
-                onChange={handleInput}
+                value={formik.values.userNotes}
+                name="userNotes"
+                onChange={formik.handleChange}
+                error={
+                  formik.errors.userNotes && Boolean(formik.errors.userNotes)
+                }
+                helperText={formik.touched.userNotes && formik.errors.userNotes}
                 size="small"
               />
             </TableCell>
             <TableCell align="right">
-              <IconButton color="inherit" onClick={handleSubmit}>
+              <IconButton color="inherit" onClick={formik.handleSubmit}>
                 <CheckIcon />
               </IconButton>
             </TableCell>

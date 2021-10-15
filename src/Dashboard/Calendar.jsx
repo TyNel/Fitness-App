@@ -1,17 +1,18 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import RCalendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { Context } from "../Store";
 import { getExercisesByDate } from "../Services/UserServices";
 import { useParams } from "react-router-dom";
+import Box from "@mui/material/Box";
 
-function Calendar(props) {
+function Calendar() {
   const [state, dispatch] = useContext(Context);
   const [date, setDate] = useState(new Date());
   const { id } = useParams();
 
   const onGetExerciseSuccess = useCallback(
     (response) => {
+      console.log(response);
       let data = response.data;
       dispatch({ type: "SET_EXERCISES", payload: data });
     },
@@ -19,31 +20,51 @@ function Calendar(props) {
   );
 
   useEffect(() => {
-    getExercisesByDate(id, date.toISOString().substring(0, 10))
+    getExercisesByDate(
+      id,
+      date
+        .toLocaleString("en-us", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2")
+    )
       .then(onGetExerciseSuccess)
       .catch(onGetExerciseError);
   }, [date, id, onGetExerciseSuccess]);
 
-  const onDateChange = (newDate) => {
-    setDate(newDate);
+  useEffect(() => {
+    let dateConvert = date
+      .toLocaleString("en-us", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2");
+
     dispatch({
       type: "SET_DATE",
-      payload: date.toISOString().substring(0, 10),
+      payload: dateConvert,
     });
+  }, [date, dispatch]);
+
+  const onDateChange = (newDate) => {
+    setDate(newDate);
   };
 
-  const onGetExerciseError = (response) => {
-    console.log(response.error);
+  const onGetExerciseError = (error) => {
+    console.log(error);
   };
 
   return (
-    <div>
+    <Box>
       <RCalendar
         onChange={onDateChange}
         value={date}
         showNeighboringMonth={false}
       />
-    </div>
+    </Box>
   );
 }
 
