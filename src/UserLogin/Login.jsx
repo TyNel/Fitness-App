@@ -17,6 +17,7 @@ import { Context } from "../Store";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const theme = createTheme();
 
@@ -35,25 +36,26 @@ function Login(props) {
   });
 
   const onSubmit = async (values) => {
-    let response = await axios.post(
-      "https://localhost:5001/api/fitness/login",
-      values
-    );
-
-    if (response.error) {
-      console.log(response.error);
+    try {
+      const response = await axios.post(
+        "https://localhost:5001/api/fitness/login",
+        values
+      );
+      console.log(response);
+      if (response.status === 200) {
+        toast.success("Login Successful");
+        dispatch({
+          type: "SET_USER",
+          payload: response.data.LoginUser,
+        });
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`);
+      }
+    } catch (error) {
+      toast.error("Login Failed");
+      console.log(error);
     }
-
-    dispatch({
-      type: "SET_USER",
-      payload: response.data.LoginUser,
-    });
-
-    localStorage.setItem("accessToken", response.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-    props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`);
-
-    console.log(response);
   };
 
   const initialValues = {

@@ -3,6 +3,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import { withRouter, BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./UserLogin/Login";
 import Register from "./UserLogin/Register";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (

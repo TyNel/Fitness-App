@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -30,6 +31,7 @@ const style = {
 export default function AddExerciseModal() {
   const [state, dispatch] = useContext(Context);
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm();
@@ -52,7 +54,7 @@ export default function AddExerciseModal() {
     reps: "",
     exercise_type: "",
     status_id: "",
-    user_notes: "",
+    userNotes: "",
     dateAdded: "",
     dateModified: "",
   };
@@ -66,6 +68,7 @@ export default function AddExerciseModal() {
     reps: yup
       .number("Please enter number of reps")
       .required("Rep count is required"),
+    userNotes: yup.string("Please enter notes"),
   });
 
   const onSubmit = async (values) => {
@@ -73,27 +76,31 @@ export default function AddExerciseModal() {
     newValues.dateAdded = state.dateClicked;
     newValues.dateModified = date;
 
-    console.log(newValues);
+    try {
+      const response = await axios.post(
+        "https://localhost:5001/api/fitness/addExercise",
+        newValues,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
-    const response = await axios.post(
-      "https://localhost:5001/api/fitness/addExercise",
-      newValues,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
+      if (response.status === 200) {
+        toast.success("Exercise added");
+        let currentExercises = [...state.exercises];
+        currentExercises.push(response.data);
+        dispatch({
+          type: "SET_EXERCISES",
+          payload: currentExercises,
+        });
+        handleClose();
       }
-    );
-
-    let currentExercises = [...state.exercises];
-
-    currentExercises.push(response.data);
-
-    dispatch({
-      type: "SET_EXERCISES",
-      payload: currentExercises,
-    });
-    handleClose();
+    } catch (error) {
+      toast.error("Error adding exercise");
+      console.log(error);
+    }
   };
 
   const formik = useFormik({
@@ -206,14 +213,14 @@ export default function AddExerciseModal() {
               margin="normal"
               fullWidth
               label="Notes"
-              name="user_notes"
+              name="userNotes"
               autoFocus
               onChange={formik.handleChange}
-              value={formik.values.user_notes}
+              value={formik.values.userNotes}
               error={
-                formik.touched.user_notes && Boolean(formik.errors.user_notes)
+                formik.touched.userNotes && Boolean(formik.errors.userNotes)
               }
-              helperText={formik.touched.user_notes && formik.errors.user_notes}
+              helperText={formik.touched.userNotes && formik.errors.userNotes}
             />
             <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
               Add

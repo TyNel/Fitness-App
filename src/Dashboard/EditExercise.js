@@ -14,6 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Edit_Exercises(props) {
   const statusValue = [
@@ -54,19 +56,28 @@ function Edit_Exercises(props) {
   };
 
   const onSubmit = async (values) => {
-    let response = await axios.put(
-      "https://localhost:5001/api/fitness/UpdateExercise",
-      values,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
+    try {
+      const response = await axios.put(
+        "https://localhost:5001/api/fitness/UpdateExercise",
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Exercise updated");
+        let data = [...state.exercises];
+        data[index] = response.data;
+        dispatch({ type: "SET_EXERCISES", payload: data });
+        handleEdit();
       }
-    );
-    let data = [...state.exercises];
-    data[index] = response.data;
-    dispatch({ type: "SET_EXERCISES", payload: data });
-    handleEdit();
+    } catch (error) {
+      toast.error("Error updating exercise");
+      console.log(error);
+    }
   };
 
   const validationSchema = yup.object({
