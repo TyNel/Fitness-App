@@ -18,11 +18,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const theme = createTheme();
 
 function Login(props) {
   const [state, dispatch] = useContext(Context);
+  const mobileView = useMediaQuery('(max-width:760px)');
+  console.log(mobileView)
+
 
   const validationSchema = yup.object({
     email: yup
@@ -50,7 +54,14 @@ function Login(props) {
         });
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
-        props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`);
+        if(mobileView === true)
+        {
+          props.history.push(`/Dashboard/mobile/${response.data.LoginUser.UserId}`)
+        }
+        if(mobileView === false){
+          props.history.push(`/Dashboard/${response.data.LoginUser.UserId}`);
+        }
+       
       }
     } catch (error) {
       toast.error("Login Failed");
