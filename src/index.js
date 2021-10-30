@@ -5,6 +5,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import Store from "./Store";
 import { ToastContainer } from "react-toastify";
+import * as serviceWorker from "./serviceWorkerRegistration";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -22,3 +23,5 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById("root")
 );
+
+serviceWorker.register();

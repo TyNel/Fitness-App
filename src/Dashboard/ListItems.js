@@ -25,6 +25,7 @@ export function MainListItems() {
 
       if (response.status === 204) {
         toast.success("Logout successful");
+        window.localStorage.clear();
         history.push("/");
       }
     } catch (error) {
