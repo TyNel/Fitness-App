@@ -67,7 +67,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 const mdTheme = createTheme();
 
-function Dashboard(props) {
+function Dashboard() {
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);

@@ -10,6 +10,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Context } from "../Store";
 import EditExercise from "./EditExercise";
 import ConfirmDialog from "./ConfirmDialog";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 function Exercises() {
   const [state, dispatch] = useContext(Context);
@@ -21,53 +26,13 @@ function Exercises() {
     setEditing(!isEditing);
   };
 
-  return isEditing ? (
-    <EditExercise handleEdit={handleEdit} id={exerciseId} />
-  ) : (
-    <React.Fragment>
-      <Title>Exercises</Title>
-      
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Type</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Weight</TableCell>
-            <TableCell>Reps</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Notes</TableCell>
-            <TableCell />
-            <TableCell />
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {state.exercises.map((exercise) => (
-            <TableRow key={exercise.Id}>
-              <TableCell>{exercise.Type}</TableCell>
-              <TableCell>{exercise.Exercise_Name}</TableCell>
-              <TableCell>{exercise.Weight}</TableCell>
-              <TableCell>{exercise.Reps}</TableCell>
-              <TableCell>{exercise.Status_Name}</TableCell>
-              <TableCell>{exercise.UserNotes}</TableCell>
-              <TableCell align="right">
-                <IconButton
-                  color="inherit"
-                  onClick={() => handleEdit(exercise.Id)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell align="right"></TableCell>
-              <TableCell>
-                <ConfirmDialog id={exercise.Id} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      
-    </React.Fragment>
+  return (
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent></CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
   );
 }
 
