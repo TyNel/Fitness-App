@@ -40,7 +40,7 @@ function Login(props) {
   const onSubmit = async (values) => {
     try {
       const response = await axios.post(
-        " http://192.168.1.2:5000/api/fitness/login",
+        " https://192.168.1.2:5000/api/fitness/login",
         values
       );
       console.log(response);
