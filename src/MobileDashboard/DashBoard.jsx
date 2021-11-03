@@ -4,12 +4,13 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import CalendarModal from "./CalendarModal";
 import Exercises from "./Exercises";
 import { Context } from "../Store";
 import { GetExerciseType, GetUser } from "../Services/UserServices";
 import { useParams } from "react-router-dom";
+import AddExerciseModal from "./AddExerciseModal";
+import DropDownMenu from "./UserMenu";
 
 export default function MDashboard() {
   const [state, dispatch] = useContext(Context);
@@ -65,14 +66,15 @@ export default function MDashboard() {
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
+              sx={{ mr: 1 }}
             >
-              <MenuIcon />
+              <DropDownMenu />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {/* {`Hello ${state.currentUser.FirstName}`} */}
+              {`Hi ${state.currentUser.FirstName}`}
             </Typography>
             <CalendarModal />
+            <AddExerciseModal />
           </Toolbar>
         </AppBar>
       </Box>

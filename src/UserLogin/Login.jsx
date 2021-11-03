@@ -37,6 +37,14 @@ function Login(props) {
       .required("Password is required"),
   });
 
+  const date = new Date()
+    .toLocaleString("en-us", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2");
+
   const onSubmit = async (values) => {
     try {
       const response = await axios.post(
@@ -49,6 +57,11 @@ function Login(props) {
         dispatch({
           type: "SET_USER",
           payload: response.data.LoginUser,
+        });
+
+        dispatch({
+          type: "SET_DATE",
+          payload: date,
         });
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);

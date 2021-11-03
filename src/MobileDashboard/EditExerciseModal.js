@@ -2,12 +2,11 @@ import React, { useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { Context } from "../Store";
 import Button from "@mui/material/Button";
-import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -28,16 +27,24 @@ const style = {
   spacing: 3,
 };
 
-export default function AddExerciseModal() {
+export default function EditExerciseModal(props) {
+  const statusValue = [
+    { value: 1, label: "Completed" },
+    { value: 2, label: "Not Completed" },
+  ];
+
   const [state, dispatch] = useContext(Context);
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm();
     setOpen(false);
   };
-  const { id } = useParams();
+  const id = props.id;
+  const index = state.exercises.findIndex((exercise) => exercise.Id === id);
+  const currentExercise = state.exercises[index];
+
+  console.log(currentExercise);
 
   const date = new Date()
     .toLocaleString("en-us", {
@@ -48,15 +55,20 @@ export default function AddExerciseModal() {
     .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2");
 
   const initialValues = {
-    userId: id ? id : "",
-    exercise_name: "",
-    weight: "",
-    reps: "",
-    exercise_type: "",
-    status_id: "",
-    userNotes: "",
-    dateAdded: "",
-    dateModified: "",
+    id: id,
+    userId: currentExercise.UserId ? currentExercise.UserId : "",
+    exercise_name: currentExercise.Exercise_Name
+      ? currentExercise.Exercise_Name
+      : "",
+    weight: currentExercise.Weight ? currentExercise.Weight : "",
+    reps: currentExercise.Reps ? currentExercise.Reps : "",
+    exercise_type: currentExercise.Exercise_Type
+      ? currentExercise.Exercise_Type
+      : "",
+    status_id: currentExercise.Status_Id ? currentExercise.Status_Id : "",
+    userNotes: currentExercise.UserNotes ? currentExercise.UserNotes : "",
+    dateAdded: currentExercise.DateAdded ? currentExercise.DateAdded : "",
+    dateModified: date,
   };
 
   const validationSchema = yup.object({
@@ -68,18 +80,13 @@ export default function AddExerciseModal() {
     reps: yup
       .number("Please enter number of reps")
       .required("Rep count is required"),
-    userNotes: yup.string("Please enter notes"),
   });
 
   const onSubmit = async (values) => {
-    const newValues = { ...values };
-    newValues.dateAdded = state.dateClicked;
-    newValues.dateModified = date;
-
     try {
-      const response = await axios.post(
-        "https://localhost:5001/api/fitness/addExercise",
-        newValues,
+      const response = await axios.put(
+        "https://localhost:5001/api/fitness/UpdateExercise",
+        values,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -88,37 +95,28 @@ export default function AddExerciseModal() {
       );
 
       if (response.status === 200) {
-        toast.success("Exercise added");
-        let currentExercises = [...state.exercises];
-        currentExercises.push(response.data);
-        dispatch({
-          type: "SET_EXERCISES",
-          payload: currentExercises,
-        });
+        toast.success("Exercise updated");
+        let data = [...state.exercises];
+        data[index] = response.data;
+        dispatch({ type: "SET_EXERCISES", payload: data });
         handleClose();
       }
     } catch (error) {
-      toast.error("Error adding exercise");
+      toast.error("Error updating exercise");
       console.log(error);
     }
   };
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   });
 
-  const statusValue = [
-    { value: 1, label: "Completed" },
-    { value: 2, label: "Not Completed" },
-  ];
-
-  console.log(formik.values);
+  console.log(currentExercise.Weight);
 
   return (
     <div>
-      <AddIcon onClick={handleOpen} sx={{ ml: 4, mr: 1 }} />
+      <EditIcon onClick={handleOpen} fontSize="small" />
       <Modal
         open={open}
         onClose={handleClose}
@@ -128,7 +126,7 @@ export default function AddExerciseModal() {
         <FormControl onSubmit={formik.handleSubmit} sx={style}>
           <Box component="form">
             <Typography component="h1" variant="h5">
-              Add Exercise
+              Edit Exercise
             </Typography>
             <TextField
               margin="normal"

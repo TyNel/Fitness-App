@@ -35,7 +35,7 @@ function Edit_Exercises(props) {
   const handleEdit = props.handleEdit;
   const id = props.id;
   const index = state.exercises.findIndex((exercise) => exercise.Id === id);
-  const currentExercise = { ...state.exercises[index] };
+  const currentExercise = state.exercises[index];
   console.log(currentExercise);
 
   const initialValues = {
@@ -122,9 +122,9 @@ function Edit_Exercises(props) {
                 select
                 size="small"
                 name="exercise_type"
-                fullWidth
                 value={formik.values.exercise_type}
                 onChange={formik.handleChange}
+                fullWidth
               >
                 {state.type.map((type) => {
                   return (
@@ -138,7 +138,7 @@ function Edit_Exercises(props) {
             <TableCell>
               <TextField
                 value={formik.values.exercise_name}
-                name="exercise_mame"
+                name="exercise_name"
                 onChange={formik.handleChange}
                 size="small"
                 fullWidth

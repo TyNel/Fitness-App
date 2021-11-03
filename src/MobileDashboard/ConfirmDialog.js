@@ -51,7 +51,11 @@ export default function ConfirmDialog(props) {
 
   return (
     <div>
-      <DeleteIcon variant="outlined" onClick={handleClickOpen} />
+      <DeleteIcon
+        variant="outlined"
+        onClick={handleClickOpen}
+        fontSize="small"
+      />
       <Dialog
         open={open}
         onClose={handleClose}

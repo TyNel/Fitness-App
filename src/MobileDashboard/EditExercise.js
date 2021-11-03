@@ -89,7 +89,6 @@ function Edit_Exercises(props) {
     reps: yup
       .number("Please enter number of reps")
       .required("Rep count is required"),
-    userNotes: yup.string("Please enter notes"),
   });
 
   const formik = useFormik({
