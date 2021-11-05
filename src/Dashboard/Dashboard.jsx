@@ -146,7 +146,7 @@ function Dashboard() {
               color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
-            >{`Hello ${state.currentUser.FirstName}`}</Typography>
+            >{`Hello Hannah`}</Typography>
             <AddExerciseModal />
           </Toolbar>
         </AppBar>
