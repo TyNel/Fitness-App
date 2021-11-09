@@ -53,7 +53,7 @@ function Register(props) {
 
   const onSubmit = async (values) => {
     let response = await axios.post(
-      "https://localhost:5001/api/fitness",
+      "https://tfitnessapp.azurewebsites.net/api/fitness",
       values
     );
     console.log("Register Success redirect to login", response);
