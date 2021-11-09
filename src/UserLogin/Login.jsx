@@ -33,7 +33,7 @@ function Login(props) {
       .required("Email is required"),
     password: yup
       .string("Enter your password")
-      .min(8, "Password must be at least 1 characters")
+      .min(4, "Password must be at least 1 characters")
       .required("Password is required"),
   });
 
