@@ -33,22 +33,14 @@ function Login(props) {
       .required("Email is required"),
     password: yup
       .string("Enter your password")
-      .min(8, "Password must be at least 8 characters")
+      .min(8, "Password must be at least 1 characters")
       .required("Password is required"),
   });
-
-  const date = new Date()
-    .toLocaleString("en-us", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2");
 
   const onSubmit = async (values) => {
     try {
       const response = await axios.post(
-        "https://localhost:5001/api/fitness/login",
+        "https://tfitnessapp.azurewebsites.net/api/fitness/login",
         values
       );
       console.log(response);
@@ -57,11 +49,6 @@ function Login(props) {
         dispatch({
           type: "SET_USER",
           payload: response.data.LoginUser,
-        });
-
-        dispatch({
-          type: "SET_DATE",
-          payload: date,
         });
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
