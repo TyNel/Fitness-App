@@ -36,7 +36,6 @@ function Edit_Exercises(props) {
   const id = props.id;
   const index = state.exercises.findIndex((exercise) => exercise.Id === id);
   const currentExercise = state.exercises[index];
-  console.log(currentExercise);
 
   const initialValues = {
     id: id,
@@ -55,10 +54,11 @@ function Edit_Exercises(props) {
     dateModified: date,
   };
 
+  console.log(initialValues);
   const onSubmit = async (values) => {
     try {
       const response = await axios.put(
-        "https://localhost:5001/api/fitness/UpdateExercise",
+        "https://tfitnessapp.azurewebsites.net/api/fitness/UpdateExercise",
         values,
         {
           headers: {

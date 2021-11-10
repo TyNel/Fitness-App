@@ -26,7 +26,7 @@ export default function ConfirmDialog(props) {
   async function onDelete(id) {
     try {
       let response = await axios.delete(
-        `https://localhost:5001/api/fitness/${id}`,
+        `https://tfitnessapp.azurewebsites.net/api/fitness/${id}`,
         {
           headers: {
             "Content-Type": "application/json",

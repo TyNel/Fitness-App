@@ -78,7 +78,7 @@ export default function AddExerciseModal() {
 
     try {
       const response = await axios.post(
-        "https://localhost:5001/api/fitness/addExercise",
+        "https://tfitnessapp.azurewebsites.net/api/fitness/addExercise",
         newValues,
         {
           headers: {

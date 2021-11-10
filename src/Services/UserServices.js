@@ -3,7 +3,7 @@ import axios from "axios";
 const onLogin = (payload) => {
   const config = {
     method: "POST",
-    url: "https://localhost:5001/api/fitness/login",
+    url: "https://tfitnessapp.azurewebsites.net/api/fitness/login",
     data: payload,
     withCredentials: true,
     crossdomain: true,
@@ -16,7 +16,7 @@ const onLogin = (payload) => {
 const onRegister = (payload) => {
   const config = {
     method: "POST",
-    url: "https://localhost:5001/api/fitness",
+    url: "https://tfitnessapp.azurewebsites.net/api/fitness",
     data: payload,
     withCredentials: true,
     crossdomain: true,
@@ -29,7 +29,7 @@ const onRegister = (payload) => {
 const getExerciseData = (id) => {
   const config = {
     method: "GET",
-    url: `https://localhost:5001/api/fitness/${id}`,
+    url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}`,
     withCredentials: true,
     crossdomain: true,
     headers: {
@@ -44,7 +44,7 @@ const getExerciseData = (id) => {
 const getExercisesByDate = (id, date) => {
   const config = {
     method: "GET",
-    url: `https://localhost:5001/api/fitness/${id}/${date}`,
+    url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}/${date}`,
     withCredentials: true,
     crossdomain: true,
     headers: {
@@ -59,7 +59,7 @@ const getExercisesByDate = (id, date) => {
 const GetExerciseType = () => {
   const config = {
     method: "GET",
-    url: `https://localhost:5001/api/fitness/ExerciseType`,
+    url: `https://tfitnessapp.azurewebsites.net/api/fitness/ExerciseType`,
     withCredentials: true,
     crossdomain: true,
     headers: {
@@ -74,7 +74,7 @@ const GetExerciseType = () => {
 const AddExercise = (payload) => {
   const config = {
     method: "POST",
-    url: "https://localhost:5001/api/fitness/addExercise",
+    url: "https://tfitnessapp.azurewebsites.net/api/fitness/addExercise",
     data: payload,
     withCredentials: true,
     crossdomain: true,
@@ -89,7 +89,7 @@ const AddExercise = (payload) => {
 const GetUser = (id) => {
   const config = {
     method: "GET",
-    url: `https://localhost:5001/api/fitness/user/${id}`,
+    url: `https://tfitnessapp.azurewebsites.net/api/fitness/user/${id}`,
     withCredentials: true,
     crossdomain: true,
     headers: {
@@ -104,7 +104,7 @@ const GetUser = (id) => {
 const DeleteExercise = (id) => {
   const config = {
     method: "DELETE",
-    url: `https://localhost:5001/api/fitness/${id}`,
+    url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}`,
     withCredentials: true,
     crossdomain: true,
     headers: {
@@ -119,7 +119,7 @@ const DeleteExercise = (id) => {
 const UpdateExercise = (payload) => {
   const config = {
     method: "PUT",
-    url: "https://localhost:5001/api/fitness/UpdateExercise",
+    url: "https://tfitnessapp.azurewebsites.net/api/fitness/UpdateExercise",
     data: payload,
     withCredentials: true,
     crossdomain: true,

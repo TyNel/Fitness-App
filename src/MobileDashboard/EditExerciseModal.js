@@ -85,7 +85,7 @@ export default function EditExerciseModal(props) {
   const onSubmit = async (values) => {
     try {
       const response = await axios.put(
-        "https://localhost:5001/api/fitness/UpdateExercise",
+        "https://tfitnessapp.azurewebsites.net/api/fitness/UpdateExercise",
         values,
         {
           headers: {

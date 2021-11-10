@@ -14,7 +14,7 @@ export function MainListItems() {
   async function onLogout() {
     try {
       let response = await axios.delete(
-        `https://localhost:5001/api/fitness/logout`,
+        `https://tfitnessapp.azurewebsites.net/api/fitness/logout`,
         {
           headers: {
             "Content-Type": "application/json",
