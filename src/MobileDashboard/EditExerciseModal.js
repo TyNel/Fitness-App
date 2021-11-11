@@ -22,6 +22,7 @@ const style = {
   width: "75%",
   bgcolor: "background.paper",
   border: "2px solid #000",
+  overflow: "scroll",
   boxShadow: 24,
   p: 3,
   spacing: 3,
@@ -56,18 +57,14 @@ export default function EditExerciseModal(props) {
 
   const initialValues = {
     id: id,
-    userId: currentExercise.UserId ? currentExercise.UserId : "",
-    exercise_name: currentExercise.Exercise_Name
-      ? currentExercise.Exercise_Name
-      : "",
-    weight: currentExercise.Weight ? currentExercise.Weight : "",
-    reps: currentExercise.Reps ? currentExercise.Reps : "",
-    exercise_type: currentExercise.Exercise_Type
-      ? currentExercise.Exercise_Type
-      : "",
-    status_id: currentExercise.Status_Id ? currentExercise.Status_Id : "",
-    userNotes: currentExercise.UserNotes ? currentExercise.UserNotes : "",
-    dateAdded: currentExercise.DateAdded ? currentExercise.DateAdded : "",
+    userId: currentExercise ? currentExercise.UserId : "",
+    exercise_name: currentExercise ? currentExercise.Exercise_Name : "",
+    weight: currentExercise ? currentExercise.Weight : "",
+    reps: currentExercise ? currentExercise.Reps : "",
+    exercise_type: currentExercise ? currentExercise.Exercise_Type : "",
+    status_id: currentExercise ? currentExercise.Status_Id : "",
+    userNotes: currentExercise ? currentExercise.UserNotes : "",
+    dateAdded: currentExercise ? currentExercise.DateAdded : "",
     dateModified: date,
   };
 
@@ -111,8 +108,6 @@ export default function EditExerciseModal(props) {
     validationSchema,
     onSubmit,
   });
-
-  console.log(currentExercise.Weight);
 
   return (
     <div>

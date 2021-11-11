@@ -39,22 +39,29 @@ function Edit_Exercises(props) {
 
   const initialValues = {
     id: id,
-    userId: currentExercise.UserId ? currentExercise.UserId : "",
-    exercise_name: currentExercise.Exercise_Name
-      ? currentExercise.Exercise_Name
-      : "",
-    weight: currentExercise.Weight ? currentExercise.Weight : "",
-    reps: currentExercise.Reps ? currentExercise.Reps : "",
-    exercise_type: currentExercise.Exercise_Type
-      ? currentExercise.Exercise_Type
-      : "",
-    status_id: currentExercise.Status_Id ? currentExercise.Status_Id : "",
-    userNotes: currentExercise.UserNotes ? currentExercise.UserNotes : "",
-    dateAdded: currentExercise.DateAdded ? currentExercise.DateAdded : "",
+    userId: currentExercise ? currentExercise.UserId : "",
+    exercise_name: currentExercise ? currentExercise.Exercise_Name : "",
+    weight: currentExercise ? currentExercise.Weight : "",
+    reps: currentExercise ? currentExercise.Reps : "",
+    exercise_type: currentExercise ? currentExercise.Exercise_Type : "",
+    status_id: currentExercise ? currentExercise.Status_Id : "",
+    userNotes: currentExercise ? currentExercise.UserNotes : "",
+    dateAdded: currentExercise ? currentExercise.DateAdded : "",
     dateModified: date,
   };
 
-  console.log(initialValues);
+  const validationSchema = yup.object({
+    exercise_name: yup
+      .string("Please enter a name")
+      .min(2, "Name must be at least 2 characters")
+      .required("Name is required"),
+    weight: yup.number("Please enter a weight").required("Weight is required"),
+    reps: yup
+      .number("Please enter number of reps")
+      .required("Rep count is required"),
+    userNotes: yup.string("Please enter notes"),
+  });
+
   const onSubmit = async (values) => {
     try {
       const response = await axios.put(
@@ -79,18 +86,6 @@ function Edit_Exercises(props) {
       console.log(error);
     }
   };
-
-  const validationSchema = yup.object({
-    exercise_name: yup
-      .string("Please enter a name")
-      .min(2, "Name must be at least 2 characters")
-      .required("Name is required"),
-    weight: yup.number("Please enter a weight").required("Weight is required"),
-    reps: yup
-      .number("Please enter number of reps")
-      .required("Rep count is required"),
-    userNotes: yup.string("Please enter notes"),
-  });
 
   const formik = useFormik({
     initialValues,
