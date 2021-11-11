@@ -15,7 +15,7 @@ ReactDOM.render(
         <ToastContainer
           theme={"colored"}
           position={"bottom-left"}
-          autoclose={500}
+          autoClose={1250}
           closeOnClick={true}
         />
       </Store>
