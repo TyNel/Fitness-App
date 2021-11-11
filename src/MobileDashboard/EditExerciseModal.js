@@ -19,7 +19,7 @@ const style = {
   left: "50%",
   height: "90%",
   transform: "translate(-50%, -50%)",
-  width: "75%",
+  width: "100%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   overflow: "scroll",
