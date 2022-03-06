@@ -5,6 +5,7 @@ const onLogin = (payload) => {
     method: "POST",
     url: "https://tfitnessapp.azurewebsites.net/api/fitness/login",
     data: payload,
+    withCredentials: true,
     crossdomain: true,
     headers: { "Content-Type": "application/json" },
   };
@@ -17,6 +18,7 @@ const onRegister = (payload) => {
     method: "POST",
     url: "https://tfitnessapp.azurewebsites.net/api/fitness",
     data: payload,
+    withCredentials: true,
     crossdomain: true,
     headers: { "Content-Type": "application/json" },
   };
@@ -28,6 +30,7 @@ const getExerciseData = (id) => {
   const config = {
     method: "GET",
     url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}`,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
@@ -42,6 +45,7 @@ const getExercisesByDate = (id, date) => {
   const config = {
     method: "GET",
     url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}/${date}`,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
@@ -56,6 +60,7 @@ const GetExerciseType = () => {
   const config = {
     method: "GET",
     url: `https://tfitnessapp.azurewebsites.net/api/fitness/ExerciseType`,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
@@ -71,6 +76,7 @@ const AddExercise = (payload) => {
     method: "POST",
     url: "https://tfitnessapp.azurewebsites.net/api/fitness/addExercise",
     data: payload,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -84,6 +90,7 @@ const GetUser = (id) => {
   const config = {
     method: "GET",
     url: `https://tfitnessapp.azurewebsites.net/api/fitness/user/${id}`,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
@@ -98,6 +105,7 @@ const DeleteExercise = (id) => {
   const config = {
     method: "DELETE",
     url: `https://tfitnessapp.azurewebsites.net/api/fitness/${id}`,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
@@ -113,6 +121,7 @@ const UpdateExercise = (payload) => {
     method: "PUT",
     url: "https://tfitnessapp.azurewebsites.net/api/fitness/UpdateExercise",
     data: payload,
+    withCredentials: true,
     crossdomain: true,
     headers: {
       "Content-Type": "application/json",
