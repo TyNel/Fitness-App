@@ -5,16 +5,17 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CalendarModal from "./CalendarModal";
-import Exercises from "./Exercises";
+import MobileExercises from "./M_Exercises";
 import { Context } from "../Store";
 import { GetExerciseType, GetUser } from "../Services/UserServices";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import AddExerciseModal from "./AddExerciseModal";
 import DropDownMenu from "./UserMenu";
 
 export default function MDashboard() {
   const [state, dispatch] = useContext(Context);
   const { id } = useParams();
+  let history = useHistory();
 
   const onGetTypeSuccess = useCallback(
     (response) => {
@@ -43,6 +44,10 @@ export default function MDashboard() {
   };
 
   useEffect(() => {
+    if (state.currentUser.UserId !== parseInt(id)) {
+      history.push("/");
+      return;
+    }
     if (state.type.length === 0)
       GetExerciseType().then(onGetTypeSuccess).catch(onGetTypeError);
     if (state.currentUser === "") {
@@ -54,6 +59,7 @@ export default function MDashboard() {
     id,
     OnUserSuccess,
     state.type.length,
+    history,
   ]);
 
   return (
@@ -78,7 +84,7 @@ export default function MDashboard() {
           </Toolbar>
         </AppBar>
       </Box>
-      <Exercises />
+      <MobileExercises />
     </React.Fragment>
   );
 }

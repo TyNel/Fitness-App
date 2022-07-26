@@ -114,8 +114,6 @@ export default function AddExerciseModal() {
     { value: 2, label: "Not Completed" },
   ];
 
-  console.log(formik.values);
-
   return (
     <div>
       <Fab size="medium" color="grey" aria-label="add">

@@ -115,8 +115,6 @@ export default function AddExerciseModal() {
     { value: 2, label: "Not Completed" },
   ];
 
-  console.log(formik.values);
-
   return (
     <div>
       <AddIcon onClick={handleOpen} sx={{ ml: 4, mr: 1 }} />

@@ -45,8 +45,6 @@ export default function EditExerciseModal(props) {
   const index = state.exercises.findIndex((exercise) => exercise.Id === id);
   const currentExercise = state.exercises[index];
 
-  console.log(currentExercise);
-
   const date = new Date()
     .toLocaleString("en-us", {
       year: "numeric",

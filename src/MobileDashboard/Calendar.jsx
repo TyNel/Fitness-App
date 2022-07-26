@@ -12,7 +12,6 @@ function Calendar() {
 
   const onGetExerciseSuccess = useCallback(
     (response) => {
-      console.log(response);
       let data = response.data;
       dispatch({ type: "SET_EXERCISES", payload: data });
     },

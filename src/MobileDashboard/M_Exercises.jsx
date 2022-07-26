@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,7 +8,7 @@ import { Context } from "../Store";
 import EditExerciseModal from "./EditExerciseModal";
 import ConfirmDialog from "./ConfirmDialog";
 
-function Exercises() {
+function MobileExercises() {
   const [state, dispatch] = useContext(Context);
 
   return (
@@ -41,4 +41,4 @@ function Exercises() {
   );
 }
 
-export default Exercises;
+export default MobileExercises;

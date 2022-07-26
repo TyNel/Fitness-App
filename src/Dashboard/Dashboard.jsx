@@ -20,7 +20,7 @@ import Exercises from "./Exercises";
 import AddExerciseModal from "./AddExerciseModal";
 import { Context } from "../Store";
 import { GetExerciseType, GetUser } from "../Services/UserServices";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -73,6 +73,7 @@ function Dashboard() {
     setOpen(!open);
   };
   const { id } = useParams();
+  let history = useHistory();
 
   const [state, dispatch] = useContext(Context);
 
@@ -102,9 +103,11 @@ function Dashboard() {
     console.log(error);
   };
 
-  console.log(state);
-
   useEffect(() => {
+    if (state.currentUser.UserId !== parseInt(id)) {
+      history.push("/");
+      return;
+    }
     if (state.type.length === 0)
       GetExerciseType().then(onGetTypeSuccess).catch(onGetTypeError);
     if (state.currentUser === "") {
@@ -116,6 +119,7 @@ function Dashboard() {
     id,
     OnUserSuccess,
     state.type.length,
+    history,
   ]);
 
   return (
@@ -125,7 +129,7 @@ function Dashboard() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              pr: "24px",
             }}
           >
             <IconButton
